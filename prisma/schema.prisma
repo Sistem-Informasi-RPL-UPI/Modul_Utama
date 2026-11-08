@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+// Prisma 7: URL koneksi diatur di prisma.config.ts (CLI) dan adapter di src/lib/prisma.ts (runtime)
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  SUPER_ADMIN
+  KAPRODI
+  DOSEN
+  STAFF
+  MAHASISWA
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(MAHASISWA)
+  // Menyimpan hak akses tiap modul, contoh: {"modul_1": "VIEWER", "modul_4": "ADMIN"}
+  // Level akses: ADMIN | EDITOR | VIEWER
+  moduleAccess Json     @default("{}")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
