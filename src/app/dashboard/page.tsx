@@ -1,8 +1,17 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { getCurrentSession } from "@/lib/sso";
 import { RPL_MODULES } from "@/lib/modules-config";
 
-export default async function DashboardPage() {
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<div>Loading dashboard...</div>}>
+      <DashboardContent />
+    </Suspense>
+  );
+}
+
+async function DashboardContent() {
   const session = await getCurrentSession();
 
   return (
